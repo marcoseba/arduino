@@ -1,6 +1,8 @@
 
 #include "Arduino.h"
 #include "Hesston.h"
+#include <EEPROM.h>
+
 
 void letturaIngressiDigitali(int* ingressi, int* stato_prec) //funzione che legge gli ingressi digitali 
 {
@@ -64,4 +66,29 @@ void setupIngressi()
   pinMode(ledr,OUTPUT); //led rosso
   pinMode(ledv,OUTPUT); //led verde
 
+}
+
+
+void EEPROMWriteInt(int address, int value)
+{
+  //Decomposition from a int to 2 bytes by using bitshift.
+  //One = Most significant -> Two = Least significant byte
+  // 0xFF = 11111111  (8 bit a 1)
+  
+  byte two = (value & 0xFF);
+  byte one = ((value >> 8) & 0xFF);
+
+  //Write the 2 bytes into the eeprom memory.
+  EEPROM.write(address, two);
+  EEPROM.write(address + 1, one);
+}
+
+int EEPROMReadInt(int address)
+{
+  //Read the 2 bytes from the eeprom memory.
+  long two = EEPROM.read(address);
+  long one = EEPROM.read(address + 1);
+  
+  //Return the recomposed long by using bitshift.
+  return ((two << 0) & 0xFF) + ((one << 8) & 0xFFFF);
 }

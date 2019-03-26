@@ -1,7 +1,9 @@
 #ifndef Hesston_h
 #define Hesston_h
 
+
 #include "Arduino.h"
+#include <EEPROM.h>
 
 //inizializzazione pin led
 const int ledr = 6, ledv = 7;
@@ -15,7 +17,8 @@ void letturaMode(int *evento, int *modo); //funzione che cambia il modo operando
 
 void setupIngressi(); //funzione per il setup degli ingressi
 
+void EEPROMWriteInt(int address, int value); //funzione che scrive in memoria interi
 
-
+int EEPROMReadInt(int address); //funzione che legge in memoria interi
 
 #endif
