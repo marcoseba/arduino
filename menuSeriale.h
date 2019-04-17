@@ -12,8 +12,10 @@ const int indMemPmax = 3; //indirizzo memora pmax 2 byte
 
 #define defpmin 5     //valori soglia
 #define defpmax 200   //valori soglia
+#define sensorePressione A1
 
-void menuSeriale(bool *dataAdress,bool *dataPminAdress,bool *dataPmaxAdress,LiquidCrystal lcd);
+
+void menuSeriale(bool *dataAdress,bool *dataPminAdress,bool *dataPmaxAdress,bool *sensoriAdress,LiquidCrystal lcd);
 
 #endif
 
@@ -30,6 +32,9 @@ void menuSeriale(bool *dataAdress,bool *dataPminAdress,bool *dataPmaxAdress,Liqu
 	bool *datoPminIndirizzo = &datoPmin;
 	bool datoPmax = false;
 	bool *datoPmaxIndirizzo = &datoPmax;
+	bool sensori = false;
+    bool *sensorIndirizzo = &sensori;
+
 	LiquidCrystal lcd(rs, en, d4, d5, d6, d7);
 
 	--nel setup 
@@ -37,6 +42,7 @@ void menuSeriale(bool *dataAdress,bool *dataPminAdress,bool *dataPmaxAdress,Liqu
 	*datoIndirizzo = false;  //set inzio comunicazione
     *datoPminIndirizzo = false; //set inizio comunicazione
     *datoPmaxIndirizzo = false;  //set inizio comunicazione
+	*sensorIndirizzo = false;   //set inizio comunicazione
 	lcd.begin(16, 2);// set up the LCD's number of columns and rows
 	Serial.begin(9600); // opens serial port, sets data rate to 9600 bps
 

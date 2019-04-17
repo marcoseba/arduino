@@ -9,19 +9,18 @@
 #include <LiquidCrystal.h>
 
 
-void menuSeriale(bool *dataAdress,bool *dataPminAdress,bool *dataPmaxAdress,LiquidCrystal lcd){
-
-
-  int pmax = 0; //varibili interne 
-  int pmin = 0;
-  String a;
+void menuSeriale(bool *dataAdress,bool *dataPminAdress, bool *dataPmaxAdress,bool *sensoriAdress ,LiquidCrystal lcd){
   
+  int pmax = 0;
+  int pmin = 0;
+  
+  String a;
+  int sensorValue;
   
   while(Serial.available())  //entro nel ciclo se è arrivato un dato da seriale
   {
 
     a = Serial.readStringUntil('\n');// striga letta da seriale
-
 
     //CARICAMENTO DATI IN MEMORIA
     if((*dataAdress == true) && a != NULL )
@@ -71,6 +70,7 @@ void menuSeriale(bool *dataAdress,bool *dataPminAdress,bool *dataPmaxAdress,Liqu
     }
 
 
+  
     //MENU SERIALE 
     if(a.equals("pmin")&&(*dataAdress==false))
     {
@@ -90,11 +90,26 @@ void menuSeriale(bool *dataAdress,bool *dataPminAdress,bool *dataPmaxAdress,Liqu
       lcd.print("Imp pres max");
     
       *dataAdress = true; //sto aspettando un dato 
-      *dataPmaxAdress = true;
+      *dataPmaxAdress = true; //che tipo di dato
+    
+    }else if(a.equals("sens on")&&(*dataAdress==false))
+    {
+      Serial.println("visualizza dati");  
+      lcd.clear();
+      lcd.setCursor(0,0);
+      lcd.print("stato sensori");
+      delay(2000);
+      *sensoriAdress = true; //abilito funziose stampa dati sensori
+    
+    }else if(a.equals("sens off")&&(*dataAdress==false))
+    {
+      Serial.println("non visualizzare dati sensore");  
+      lcd.clear();
+      *sensoriAdress = false; //disabilito funziose stampa dati sensori
     
     }else if(a.equals("help")&&(*dataAdress==false))
     {
-      Serial.println("comandi:\n -pmin \n -pmax");
+      Serial.println("comandi:\n -pmin \n -pmax \n -sens on \n -sens off");
       lcd.clear();
       lcd.setCursor(0,0);
       lcd.print("Help");
@@ -121,5 +136,18 @@ void menuSeriale(bool *dataAdress,bool *dataPminAdress,bool *dataPmaxAdress,Liqu
     }
 
   }
+
+   //FUNZIONE STAMPA DATI SENSORI
+    if(*sensoriAdress == true)
+    {
+       
+       lcd.clear();
+       lcd.setCursor(0,0);
+       sensorValue = analogRead(sensorePressione);
+       //eventule mappatura
+       lcd.print(sensorValue);
+       delay(1500);      
+      
+    }
   
 }
